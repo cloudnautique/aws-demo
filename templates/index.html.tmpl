@@ -1,0 +1,31 @@
+{% extends "base.tmpl" %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+        <div class="col-md-12">
+            <h2>Squirels:</h2>
+            <p>New Squirel: <a href="/admin/new">Create</a></p>
+        </div>
+        <div class="row">
+        {%- for u in users %}
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{u.name}}</h5>
+              <div class="card-text">Bio: {{u.bio}}</div>
+            </div>
+          </div>  
+        {%- endfor %}
+        </div>
+
+    </div>
+    <!--<div class="row">
+       <ul class="list-group">
+        {%- for u in users %}
+          <li class="list-group-item">
+            <div class="username">Name: {{u.name}}</div>
+            <div class="bio">Bio: {{u.bio}}</div>
+          </li>
+        {%- endfor %}
+       </ul>
+    </div>-->
+{% endblock %}

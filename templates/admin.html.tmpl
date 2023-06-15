@@ -1,0 +1,11 @@
+{% extends "base.tmpl" %}
+{% block content %}
+{% from "_formhelpers.tmpl" import render_field %}
+<form method=post>
+    <dl>
+        {{ render_field(form.name)}}
+        {{ render_field(form.bio) }}
+    </dl>
+    <input type=submit value=Save>
+</form>
+{% endblock%}

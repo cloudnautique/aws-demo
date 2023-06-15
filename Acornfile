@@ -1,0 +1,49 @@
+args: {
+    dbName: "flask_app"
+    dbServer: "db"
+    sqlAlchemyConnectorInfo: "mariadb+mariadbconnector"
+}
+
+profiles: saas: {
+    sqlAlchemyConnectorInfo: "mysql+pymysql"
+}
+
+services: db: {
+    external: "my-db"
+}
+
+containers: {
+    app: {
+        build: {
+            context: "."
+        }
+        ports: publish: ["5000/http"]
+        dependsOn: ["migrate"]
+        if args.dev {
+            dirs: {
+                "/app": "./"
+            }
+        }
+        env: {
+            SQLALCHEMY_DATABASE_URI: "\(args.sqlAlchemyConnectorInfo)://@{service.db.secrets.admin.username}:@{service.db.secrets.admin.password}@@{service.db.address}/@{service.db.data.dbname}"
+        }
+    }
+}
+
+jobs: migrate: {
+    build: {
+        context: "."
+    }
+    env: {
+        SQLALCHEMY_DATABASE_URI: "\(args.sqlAlchemyConnectorInfo)://@{service.db.secrets.admin.username}:@{service.db.secrets.admin.password}@@{service.db.address}/@{service.db.data.dbname}"
+    }
+    command: ["python", "app.py"]
+}
+
+
+secrets: "db-admin-creds": {
+    type: "basic"
+}
+secrets: "db-user-creds": {
+    type: "basic"
+}
